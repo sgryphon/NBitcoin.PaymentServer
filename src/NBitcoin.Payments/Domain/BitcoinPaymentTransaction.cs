@@ -3,12 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace NBitcoin.Payments.Db
+namespace XyzBitcoin.Domain
 {
-    public class Class1
+    public class BitcoinPaymentTransaction
     {
-        public Class1()
-        {
-        }
     }
 }

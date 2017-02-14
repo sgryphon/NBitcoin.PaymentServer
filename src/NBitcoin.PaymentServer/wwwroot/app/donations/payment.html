@@ -1,0 +1,83 @@
+﻿<div>
+    <h2>{{vm.title}}</h2>
+    <h3>{{vm.message}}</h3>
+
+    <div class="row">
+        <div class="col-md-3">
+            Created
+        </div>
+        <div class="col-md-9">
+            {{vm.order.created | date:'yyyy-MM-dd HH:mm:ss Z'}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            Name
+        </div>
+        <div class="col-md-9">
+            {{vm.order.name}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            Email
+        </div>
+        <div class="col-md-9">
+            {{vm.order.email}}
+        </div>
+    </div>
+
+    <hr />
+
+    <div class="row">
+        <div class="col-md-3">
+            Amount (BTC)
+        </div>
+        <div class="col-md-9">
+            {{vm.payment.amountBtc}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            Order number
+        </div>
+        <div class="col-md-9">
+            {{vm.payment.indexNumber}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            Payment address
+        </div>
+        <div class="col-md-9">
+            {{ vm.payment.paymentAddress}}
+        </div>
+    </div>
+
+    <hr />
+
+    <div class="row">
+        <div class="col-md-3">
+            Checked
+        </div>
+        <div class="col-md-9">
+            {{vm.checked | date:'yyyy-MM-dd HH:mm:ss Z'}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            Amount received
+        </div>
+        <div class="col-md-9">
+            {{ vm.status.totalAmountBtc}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            Number of confirmations
+        </div>
+        <div class="col-md-9">
+            {{ vm.status.confirmationLevel}}
+        </div>
+    </div>
+</div>

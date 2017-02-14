@@ -1,7 +1,8 @@
-﻿{
+{
   "version": "1.0.0-*",
 
   "dependencies": {
+    "dbup4-sqlserver": "4.0.0-beta0003",
     "NETStandard.Library": "1.6.0"
   },
 
