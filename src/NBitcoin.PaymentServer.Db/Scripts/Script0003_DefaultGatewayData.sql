@@ -1,0 +1,22 @@
+﻿INSERT INTO dbo.Gateways (
+	Id, 
+	Title,
+	ExtPubKey
+	)
+VALUES (
+	'{2E3E0AB5-093B-4158-BC4D-3B99A53F5D84}',
+	'TANSTAAFL Café',
+	'tpubD6NzVbkrYhZ4X8PqzxNhizrbPtoJLvk6C64CiFXH7QMKqyjyNd9wRHBHJFpkKwZxFAA7Z1FZqL8qKdsZVj653k2PhaVp1PkKZTMHiTU3BmS'
+)
+GO
+
+INSERT INTO dbo.GatewayKeyIndexes (
+	GatewayId, 
+	LastKeyIndex
+	)
+VALUES (
+	'{2E3E0AB5-093B-4158-BC4D-3B99A53F5D84}',
+	0
+)
+GO
+

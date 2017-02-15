@@ -1,0 +1,92 @@
+﻿<div>
+    <h2>{{vm.title}}</h2>
+    <h3>{{vm.message}}</h3>
+
+    <div class="row">
+        <div class="col-md-3">
+            Payment to
+        </div>
+        <div class="col-md-9">
+            {{vm.request.gateway.name}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            Reference
+        </div>
+        <div class="col-md-9">
+            {{vm.request.reference}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            Description
+        </div>
+        <div class="col-md-9">
+            {{vm.request.memo}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            Amount
+        </div>
+        <div class="col-md-9">
+            {{vm.request.amount}}
+            {{vm.request.currency}}
+        </div>
+    </div>
+
+    <hr />
+
+    <div class="row">
+        <div class="col-md-3">
+            Payment time
+        </div>
+        <div class="col-md-9">
+            {{vm.payment.created | date:'yyyy-MM-dd HH:mm:ss Z'}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            Amount (BTC)
+        </div>
+        <div class="col-md-9">
+            {{vm.payment.amountBtc}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            Payment address
+        </div>
+        <div class="col-md-9">
+            {{ vm.payment.paymentAddress}}
+        </div>
+    </div>
+
+    <hr />
+
+    <div class="row">
+        <div class="col-md-3">
+            Checked
+        </div>
+        <div class="col-md-9">
+            {{vm.checked | date:'yyyy-MM-dd HH:mm:ss Z'}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            Amount received
+        </div>
+        <div class="col-md-9">
+            {{ vm.status.totalAmountBtc}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            Number of confirmations
+        </div>
+        <div class="col-md-9">
+            {{ vm.status.confirmationLevel}}
+        </div>
+    </div>
+</div>

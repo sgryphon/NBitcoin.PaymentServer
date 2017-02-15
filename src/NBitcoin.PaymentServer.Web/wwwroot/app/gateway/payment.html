@@ -1,0 +1,43 @@
+﻿<div>
+    <h2>{{vm.title}}</h2>
+    <h3>{{vm.message}}</h3>
+
+    <div class="row">
+        <div class="col-md-3">
+            Payment to
+        </div>
+        <div class="col-md-9">
+            {{vm.gateway.name}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            Reference
+        </div>
+        <div class="col-md-9">
+            {{vm.request.reference}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            Description
+        </div>
+        <div class="col-md-9">
+            {{vm.request.memo}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            Amount
+        </div>
+        <div class="col-md-9">
+            {{vm.request.amount}}
+            {{vm.request.currency}}
+        </div>
+    </div>
+
+    <hr />
+
+    <button type="submit" class="btn btn-primary" ng-click="vm.confirm()">Confirm</button>
+
+</div>

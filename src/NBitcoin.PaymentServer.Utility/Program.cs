@@ -95,8 +95,8 @@ namespace NBitcoin.PaymentServer.Utility
                 Console.WriteLine("Usage: dotnet XyzConsole.dll -o check -n <orderNumber>");
                 return;
             }
-            var paymentProcessor = new PaymentProcessor();
-            paymentProcessor.CheckOrder(orderNumber);
+            //var paymentProcessor = new PaymentProcessor();
+            //paymentProcessor.CheckOrder(orderNumber);
 
         }
 
@@ -109,8 +109,8 @@ namespace NBitcoin.PaymentServer.Utility
                 return;
             }
 
-            var paymentProcessor = new PaymentProcessor();
-            paymentProcessor.CollectOrder(orderNumber);
+            //var paymentProcessor = new PaymentProcessor();
+            //paymentProcessor.CollectOrder(orderNumber);
         }
 
         public static void Pay()
@@ -137,29 +137,29 @@ namespace NBitcoin.PaymentServer.Utility
             //paymentProcessor.VerifyExtKey();
             //paymentProcessor.VerifyTransferAddress();
 
-            var storeProcessor = new StoreProcessor();
-            var payment1 = storeProcessor.ProcessOrder();
-            var payment2 = storeProcessor.ProcessOrder();
+            //var storeProcessor = new StoreProcessor();
+            //var payment1 = storeProcessor.ProcessOrder();
+            //var payment2 = storeProcessor.ProcessOrder();
 
-            OutputUnspent(payment1.PaymentAddress);
-            OutputUnspent(payment2.PaymentAddress);
+            //OutputUnspent(payment1.PaymentAddress);
+            //OutputUnspent(payment2.PaymentAddress);
 
-            var customerProcessor = new CustomerProcessor();
-            customerProcessor.PayToAddress(payment1.PaymentAddress, payment1.AmountBtc);
+            //var customerProcessor = new CustomerProcessor();
+            //customerProcessor.PayToAddress(payment1.PaymentAddress, payment1.AmountBtc);
 
-            OutputUnspent(payment1.PaymentAddress);
-            OutputUnspent(payment2.PaymentAddress);
+            //OutputUnspent(payment1.PaymentAddress);
+            //OutputUnspent(payment2.PaymentAddress);
 
-            storeProcessor.CheckOrder(payment1.OrderReference);
-            storeProcessor.CheckOrder(payment2.OrderReference);
+            //storeProcessor.CheckOrder(payment1.OrderReference);
+            //storeProcessor.CheckOrder(payment2.OrderReference);
 
-            //paymentProcessor.ConnectToServer();
+            ////paymentProcessor.ConnectToServer();
 
-            //paymentProcessor.TransferPayment(order1);
+            ////paymentProcessor.TransferPayment(order1);
 
-            //ListAccounts();
+            ////ListAccounts();
 
-            Console.ReadLine();
+            //Console.ReadLine();
         }
 
         /*

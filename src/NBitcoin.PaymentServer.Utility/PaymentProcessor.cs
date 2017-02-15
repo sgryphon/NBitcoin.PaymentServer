@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using XyzBitcoin.Domain;
 
 namespace XyzConsole
 {
@@ -47,12 +46,12 @@ ExtPubKey: tpubD6NzVbkrYhZ4X8PqzxNhizrbPtoJLvk6C64CiFXH7QMKqyjyNd9wRHBHJFpkKwZxF
         {
             get
             {
-                if (_extKey == null)
-                {
-                    var bitcoinExtPubKey = new BitcoinExtPubKey(StoreProcessor.OrderMasterExtPubKeyWif, Network.TestNet);
-                    var bitcoinSecret = new BitcoinSecret(orderMasterSecretWif, Network.TestNet);
-                    _extKey = new ExtKey(bitcoinExtPubKey, bitcoinSecret);
-                }
+                //if (_extKey == null)
+                //{
+                //    var bitcoinExtPubKey = new BitcoinExtPubKey(StoreProcessor.OrderMasterExtPubKeyWif, Network.TestNet);
+                //    var bitcoinSecret = new BitcoinSecret(orderMasterSecretWif, Network.TestNet);
+                //    _extKey = new ExtKey(bitcoinExtPubKey, bitcoinSecret);
+                //}
                 return _extKey;
             }
         }
@@ -85,72 +84,72 @@ ExtPubKey: tpubD6NzVbkrYhZ4X8PqzxNhizrbPtoJLvk6C64CiFXH7QMKqyjyNd9wRHBHJFpkKwZxF
 
         public void CheckOrder(int orderNumber)
         {
-            var bitcoinExtPubKey = new BitcoinExtPubKey(StoreProcessor.OrderMasterExtPubKeyWif, Network.TestNet);
-            var address = bitcoinExtPubKey.ExtPubKey.Derive((uint)orderNumber).PubKey.GetAddress(bitcoinExtPubKey.Network);
+            //var bitcoinExtPubKey = new BitcoinExtPubKey(StoreProcessor.OrderMasterExtPubKeyWif, Network.TestNet);
+            //var address = bitcoinExtPubKey.ExtPubKey.Derive((uint)orderNumber).PubKey.GetAddress(bitcoinExtPubKey.Network);
 
-            var credentials = new NetworkCredential(rpcUser, rpcPassword);
-            RPCClient client = new RPCClient(credentials, new Uri(rpcServerUrl));
+            //var credentials = new NetworkCredential(rpcUser, rpcPassword);
+            //RPCClient client = new RPCClient(credentials, new Uri(rpcServerUrl));
 
-            Console.WriteLine("Checking order {0}, address '{1}'", orderNumber, address);
-            var unspentCoins = client.ListUnspent(0, 1000, address);
-            Console.WriteLine("Addr {0} has {1} unspent:", address, unspentCoins.Count());
-            var unspentIndex = 0;
-            foreach (var unspent in unspentCoins)
-            {
-                Console.WriteLine(" [{3}] Amount {0}, Conf. {1}, Outpoint {2}", unspent.Amount, unspent.Confirmations, unspent.OutPoint, unspentIndex++);
-                Console.WriteLine("  ScriptPubKey: {0}", unspent.ScriptPubKey);
-            }
+            //Console.WriteLine("Checking order {0}, address '{1}'", orderNumber, address);
+            //var unspentCoins = client.ListUnspent(0, 1000, address);
+            //Console.WriteLine("Addr {0} has {1} unspent:", address, unspentCoins.Count());
+            //var unspentIndex = 0;
+            //foreach (var unspent in unspentCoins)
+            //{
+            //    Console.WriteLine(" [{3}] Amount {0}, Conf. {1}, Outpoint {2}", unspent.Amount, unspent.Confirmations, unspent.OutPoint, unspentIndex++);
+            //    Console.WriteLine("  ScriptPubKey: {0}", unspent.ScriptPubKey);
+            //}
         }
 
         public void CollectOrder(int orderNumber)
         {
-            var bitcoinExtPubKey = new BitcoinExtPubKey(StoreProcessor.OrderMasterExtPubKeyWif);
-            var bitcoinSecret = new BitcoinSecret(orderMasterSecretWif);
-            var extKey = new ExtKey(bitcoinExtPubKey, bitcoinSecret);
-            var fromSecret = new BitcoinSecret(extKey.Derive((uint)orderNumber).PrivateKey, bitcoinExtPubKey.Network);
+            //var bitcoinExtPubKey = new BitcoinExtPubKey(StoreProcessor.OrderMasterExtPubKeyWif);
+            //var bitcoinSecret = new BitcoinSecret(orderMasterSecretWif);
+            //var extKey = new ExtKey(bitcoinExtPubKey, bitcoinSecret);
+            //var fromSecret = new BitcoinSecret(extKey.Derive((uint)orderNumber).PrivateKey, bitcoinExtPubKey.Network);
 
-            var toAddress = BitcoinAddress.Create(TransferAddressWif);
+            //var toAddress = BitcoinAddress.Create(TransferAddressWif);
 
-            var credentials = new NetworkCredential(rpcUser, rpcPassword);
-            RPCClient client = new RPCClient(credentials, new Uri(rpcServerUrl));
+            //var credentials = new NetworkCredential(rpcUser, rpcPassword);
+            //RPCClient client = new RPCClient(credentials, new Uri(rpcServerUrl));
 
-            Console.WriteLine("Checking order {0}, address '{1}'", orderNumber, fromSecret.GetAddress());
-            var unspentCoins = client.ListUnspent(0, 100000, fromSecret.GetAddress());
-            Console.WriteLine("Has {0} unspent:", unspentCoins.Count());
-            var unspentIndex = 0;
-            foreach (var unspent in unspentCoins)
-            {
-                Console.WriteLine(" [{1}] Amount {0}", unspent.Amount, unspentIndex++);
-            }
-            var totalSatoshi = unspentCoins.Sum(u => u.Amount.Satoshi);
+            //Console.WriteLine("Checking order {0}, address '{1}'", orderNumber, fromSecret.GetAddress());
+            //var unspentCoins = client.ListUnspent(0, 100000, fromSecret.GetAddress());
+            //Console.WriteLine("Has {0} unspent:", unspentCoins.Count());
+            //var unspentIndex = 0;
+            //foreach (var unspent in unspentCoins)
+            //{
+            //    Console.WriteLine(" [{1}] Amount {0}", unspent.Amount, unspentIndex++);
+            //}
+            //var totalSatoshi = unspentCoins.Sum(u => u.Amount.Satoshi);
 
-            Console.WriteLine("Total {0} unspent satoshi", totalSatoshi);
+            //Console.WriteLine("Total {0} unspent satoshi", totalSatoshi);
 
-            if (totalSatoshi > 0)
-            {
-                var coins = unspentCoins.Select(u => u.AsCoin());
+            //if (totalSatoshi > 0)
+            //{
+            //    var coins = unspentCoins.Select(u => u.AsCoin());
 
-                var fees = new Money(0.001m, MoneyUnit.BTC);
-                var amount = (new Money(totalSatoshi)) - fees;
-                Console.WriteLine("Transferring {0} (plus {1} fees)", amount, fees);
+            //    var fees = new Money(0.001m, MoneyUnit.BTC);
+            //    var amount = (new Money(totalSatoshi)) - fees;
+            //    Console.WriteLine("Transferring {0} (plus {1} fees)", amount, fees);
 
-                var txBuilder = new TransactionBuilder();
-                var tx = txBuilder
-                    .AddCoins(coins)
-                    .AddKeys(fromSecret)
-                    .Send(toAddress, amount)
-                    .SendFees(fees)
-                    .SetChange(fromSecret.GetAddress())
-                    .BuildTransaction(true);
+            //    var txBuilder = new TransactionBuilder();
+            //    var tx = txBuilder
+            //        .AddCoins(coins)
+            //        .AddKeys(fromSecret)
+            //        .Send(toAddress, amount)
+            //        .SendFees(fees)
+            //        .SetChange(fromSecret.GetAddress())
+            //        .BuildTransaction(true);
 
-                txBuilder.Verify(tx);
+            //    txBuilder.Verify(tx);
 
-                Console.WriteLine("Submitting transaction: {0}", tx);
+            //    Console.WriteLine("Submitting transaction: {0}", tx);
 
-                client.SendRawTransaction(tx);
+            //    client.SendRawTransaction(tx);
 
-                Console.WriteLine("Transaction sent");
-            }
+            //    Console.WriteLine("Transaction sent");
+            //}
         }
 
         public void VerifyExtKey()
