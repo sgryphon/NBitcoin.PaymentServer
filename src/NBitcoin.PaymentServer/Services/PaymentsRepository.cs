@@ -1,4 +1,5 @@
-﻿using NBitcoin.PaymentServer.Contracts;
+﻿using Microsoft.EntityFrameworkCore;
+using NBitcoin.PaymentServer.Contracts;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -41,9 +42,17 @@ namespace NBitcoin.PaymentServer.Services
             return _context.Gateways;
         }
 
-        public IQueryable<PaymentDetail> PaymentDetails()
+        public IQueryable<PaymentDetail> PaymentDetails(bool include = false)
         {
-            return _context.PaymentDetails;
+            var dbSet = _context.PaymentDetails;
+            if (include)
+            {
+                return _context.PaymentDetails.Include(p => p.PaymentRequest.Gateway);
+            }
+            else
+            {
+                return _context.PaymentDetails;
+            }
         }
 
         public IQueryable<PaymentRequest> PaymentRequests()

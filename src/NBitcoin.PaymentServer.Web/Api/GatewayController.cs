@@ -38,20 +38,15 @@ namespace NBitcoin.PaymentServer.Web.Api
             [FromBody]SubmitDto dto
             )
         {
-            _logger.LogInformation(1101, "Donation controller submit {0}, {1}, {2}, {3}", gatewayId, dto.Amount, dto.Currency, dto.Reference); 
-            //var order = new Order(dto.PaymentName, dto.Email, "Donation", dto.AmountMBtc, currency);
-            //await _orderRepository.Add(order);
-            //var convertedAmount = _bitcoinService.ConvertAmount(order.Currency, order.Amount);
-            //var bitcoinPayment = await _bitcoinService.CreatePayment(order.Id.ToString(), convertedAmount.AmountBtc, currency, convertedAmount.ConversionRate);
+            _logger.LogInformation(1101, "Donation controller submit {0}, {1}, {2}, {3}", gatewayId, dto.Amount, dto.Currency, dto.Reference);
+
+            var paymentDetails = await _paymentProcessor.CreatePayment(gatewayId, dto.Amount, dto.Currency, dto.Reference, dto.Memo);
             Response.StatusCode = 201;
             return new SubmitResponseDto {
-                GatewayId = Guid.Empty,
-                PaymentId = Guid.Empty
+                GatewayId = gatewayId,
+                PaymentId = paymentDetails.PaymentId
             };
             // TODO: Should this return: new CreatedResult(.. or something???
-
-            //return new PaymentDto { Order = order, Payment = bitcoinPayment };
-            //return View("Payment", new PaymentModel { Order = order, Payment = bitcoinPayment });
         }
 
         [HttpGet("{gatewayReference}")]
@@ -70,20 +65,19 @@ namespace NBitcoin.PaymentServer.Web.Api
         //[ValidateAntiForgeryToken]
         public PaymentDto GetPayment(Guid gatewayId, Guid paymentId)
         {
-            //var order = _orderRepository.Query().First(x => x.Id == orderId);
-            //var bitcoinPayment = _bitcoinService.GetPaymentDetails(orderId.ToString());
-            //return new PaymentDto { Order = order, Payment = bitcoinPayment };
-            return new PaymentDto();
+            var paymentDetail = _paymentProcessor.GetPaymentDetail(gatewayId, paymentId);
+            return new PaymentDto() {
+                PaymentDetail = paymentDetail,
+                PaymentRequest = paymentDetail.PaymentRequest
+            };
         }
 
         [HttpGet("{gatewayId}/payment/{paymentId}/status")]
         //[ValidateAntiForgeryToken]
         public StatusDto CheckPaymentStatus(Guid gatewayId, Guid paymentId)
         {
-            //var status = _bitcoinService.CheckPaymentStatus(orderId.ToString());
-            //return new StatusDto { Status = status };
-            //return View("Status", new { Status = status });
-            return new StatusDto();
+            var status = _paymentProcessor.CheckPaymentStatus(gatewayId, paymentId);
+            return new StatusDto() { Status = status };
         }
 
     }

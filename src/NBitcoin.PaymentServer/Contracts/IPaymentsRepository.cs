@@ -11,7 +11,7 @@ namespace NBitcoin.PaymentServer.Contracts
 
         IQueryable<Gateway> Gateways();
 
-        IQueryable<PaymentDetail> PaymentDetails();
+        IQueryable<PaymentDetail> PaymentDetails(bool include = false);
 
         IQueryable<PaymentRequest> PaymentRequests();
 

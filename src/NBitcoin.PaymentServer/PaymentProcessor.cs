@@ -1,5 +1,7 @@
-﻿using NBitcoin.Payment;
+﻿using Microsoft.Extensions.Options;
+using NBitcoin.Payment;
 using NBitcoin.PaymentServer.Contracts;
+using NBitcoin.PaymentServer.Services;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,15 +11,14 @@ namespace NBitcoin.PaymentServer
     public class PaymentProcessor
     {
         ICurrencyConversionService _currencyConversionService;
-        //IOptions<BitcoinOptions> _options;
         IPaymentsRepository _repository;
         IVerificationService _verificationService;
 
-        public PaymentProcessor(IPaymentsRepository repository, 
+        public PaymentProcessor(
+            IPaymentsRepository repository, 
             ICurrencyConversionService currencyConversionService, 
             IVerificationService verificationService)
         {
-            //_options = options;
             _repository = repository;
             _currencyConversionService = currencyConversionService;
             _verificationService = verificationService;
@@ -25,68 +26,70 @@ namespace NBitcoin.PaymentServer
 
         public ConvertedBtcAmount ConvertAmount(string currency, decimal amount)
         {
-            var conversionRate = 0.001m;
-            var btcAmount = Math.Round(amount * conversionRate, 3);
-            return new ConvertedBtcAmount(btcAmount, conversionRate);
+            var convertedBtcAmount = _currencyConversionService.ConvertAmount(currency, amount);
+            return convertedBtcAmount;
         }
 
-        public PaymentStatus CheckPaymentStatus(string orderReference)
+        public PaymentStatus CheckPaymentStatus(Guid gatewayId, Guid paymentId)
         {
-            //var bitcoinPayment = _repository.Query().FirstOrDefault(p => p.OrderReference == orderReference);
-            //if (bitcoinPayment == null)
-            //{
-            //    return new BitcoinPaymentStatus(Guid.Empty, -2, 0m);
-            //}
-            //var address = BitcoinAddress.Create(bitcoinPayment.PaymentAddress);
-            //var confirmationLevel = -1;
-            //var totalPaidBtc = 0m;
-            //var unspentCoins = _bitcoinClient.ListUnspent(0, maxConfirmationsToCheck, address);
-            //// Accumulate the most-confirmed transactions first
-            //foreach (var coin in unspentCoins.OrderByDescending(u => u.Confirmations))
-            //{
-            //    totalPaidBtc += coin.Amount.ToUnit(MoneyUnit.BTC);
-            //    // Until have at least enough to cover the order amount
-            //    if (confirmationLevel == -1 && totalPaidBtc >= bitcoinPayment.AmountBtc)
-            //    {
-            //        // Record the confirmation level of the transaction that finalised payment
-            //        confirmationLevel = (int)coin.Confirmations;
-            //    }
-            //    // If total is not reached, then confirmationLevel = -1
-            //}
-            //var status = new BitcoinPaymentStatus(bitcoinPayment.Id, confirmationLevel, totalPaidBtc);
-            //if (status.ConfirmationLevel > -1)
-            //{
-            //    bitcoinPayment.SetPaymentMade();
-            //}
-            //return status;
-            return null;
+            var paymentDetail = _repository.PaymentDetails()
+                .Where(p => p.PaymentRequest.Gateway.Id == gatewayId)
+                .Where(p => p.PaymentId == paymentId)
+                .First();
+            var paymentStatus = _verificationService.CheckPaymentStatus(paymentDetail.PaymentAddress, paymentDetail.AmountBtc);
+            return paymentStatus;
         }
 
-        public async Task<PaymentDetails> CreatePayment(string orderReference, decimal amountBtc,
-            string originalCurrency = null, decimal? conversionRate = null)
+        public async Task<PaymentDetail> CreatePayment(Guid gatewayId, decimal amount,
+            string currency, string reference, string memo)
         {
-            //// Create payment record
-            //var bitcoinPayment = new Payment(orderReference, amountBtc, originalCurrency, conversionRate);
-            //await _repository.Add(bitcoinPayment);
+            // Create payment request
+            var gateway = _repository.Gateways().First(x => x.Id == gatewayId);
+            var paymentRequest = new PaymentRequest(gateway, amount, currency, reference, memo);
+            await _repository.Add(paymentRequest);
+            await _repository.Save();
 
-            //// Generate the ID of the order
-            //var indexNumber = bitcoinPayment.IndexNumber;
-            //if (indexNumber == 0)
-            //{
-            //    throw new Exception("Payment index number not set.");
-            //}
-            //var derivedOrderKey = _masterPubKey.ExtPubKey.Derive((uint)indexNumber);
-            //var paymentAddress = derivedOrderKey.PubKey.GetAddress(_masterPubKey.Network);
-            //bitcoinPayment.SetPaymentAddress(paymentAddress.ToString());
-            //await _repository.Save();
+            // Convert the amount to BTC
+            string originalCurrency;
+            decimal amountBtc;
+            decimal? conversionRate;
+            if (string.IsNullOrEmpty(currency) || string.Equals(currency, "BTC", StringComparison.OrdinalIgnoreCase))
+            {
+                originalCurrency = null;
+                amountBtc = amount;
+                conversionRate = null;
+            }
+            else
+            {
+                var convertedBtcAmount = _currencyConversionService.ConvertAmount(currency, amount);
+                originalCurrency = currency;
+                amountBtc = convertedBtcAmount.AmountBtc;
+                conversionRate = convertedBtcAmount.ConversionRate;
+            }
 
-            //// Register address with bitcoin server
-            //_bitcoinClient.ImportAddress(paymentAddress, orderAccountLabel, false);
-            //bitcoinPayment.SetRegistered();
-            //await _repository.Save();
+            // TODO: Generate the ID of the order and the address
+            var keyIndex = 1001;
+            if (keyIndex == 0)
+            {
+                throw new Exception("Payment index number not set.");
+            }
+            var masterPubKey = new BitcoinExtPubKey(gateway.ExtPubKey);
+            var derivedOrderKey = masterPubKey.ExtPubKey.Derive((uint)keyIndex);
+            var paymentAddress = derivedOrderKey.PubKey.GetAddress(masterPubKey.Network);
 
-            //return bitcoinPayment;
-            return null;
+            // Save the details
+            var paymentDetail = new PaymentDetail(paymentRequest, 
+                keyIndex, paymentAddress.ToWif(), 
+                amountBtc, originalCurrency, conversionRate);
+            await _repository.Add(paymentDetail);
+            await _repository.Save();
+
+            // Register address with bitcoin server
+            _verificationService.RegisterPaymentAddress(gateway.GatewayNumber, paymentAddress.ToWif());
+            paymentDetail.SetRegistered();
+            await _repository.Save();
+
+            return paymentDetail;
         }
 
         public Gateway GetGateway(string gatewayReference)
@@ -108,10 +111,13 @@ namespace NBitcoin.PaymentServer
             return gateway;
         }
 
-        public void GetPaymentDetails(string orderReference)
+        public PaymentDetail GetPaymentDetail(Guid gatewayId, Guid paymentId)
         {
-            //var bitcoinPayment = _repository.Query().First(p => p.OrderReference == orderReference);
-            //return bitcoinPayment;
+            var paymentDetail = _repository.PaymentDetails(true)
+                .Where(p => p.PaymentRequest.Gateway.Id == gatewayId)
+                .Where(p => p.PaymentId == paymentId)
+                .First();
+            return paymentDetail;
         }
 
     }

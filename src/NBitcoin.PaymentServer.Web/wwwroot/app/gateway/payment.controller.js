@@ -24,7 +24,7 @@
         }
 
         function confirm() {
-            paymentService.submitPaymentRequest(vm.gateway.Id, vm.amount, vm.currency, vm.reference, vm.memo)
+            paymentService.submitPaymentRequest(vm.gateway.id, vm.amount, vm.currency, vm.reference, vm.memo)
                 .then(submitComplete);
 
             function submitComplete(resultData) {
