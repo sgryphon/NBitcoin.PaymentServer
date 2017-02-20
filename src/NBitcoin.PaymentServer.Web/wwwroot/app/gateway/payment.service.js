@@ -61,13 +61,12 @@
 
         function submitPaymentRequest(gatewayId, amount, currency, reference, memo) {
             var dto = {
-                gatewayId: gatewayId,
                 amount: amount,
                 currency: currency,
                 reference: reference,
                 memo: memo
             };
-            return $http.post('/api/payment', dto)
+            return $http.post('/api/gateway/' + gatewayId + '/payment', dto)
                 .then(submitPaymentRequestComplete)
                 .catch(submitPaymentRequestFailed);
 

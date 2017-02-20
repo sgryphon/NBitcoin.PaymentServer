@@ -34,10 +34,11 @@ namespace NBitcoin.PaymentServer.Web.Api
         [HttpPost("{gatewayId}/payment")]
         //[ValidateAntiForgeryToken]
         public async Task<SubmitResponseDto> Submit(
+            Guid gatewayId,
             [FromBody]SubmitDto dto
             )
         {
-            _logger.LogInformation(1101, "Donation controller submit {0}, {1}, {2}, {3}", dto.GatewayId, dto.Amount, dto.Currency, dto.Reference); 
+            _logger.LogInformation(1101, "Donation controller submit {0}, {1}, {2}, {3}", gatewayId, dto.Amount, dto.Currency, dto.Reference); 
             //var order = new Order(dto.PaymentName, dto.Email, "Donation", dto.AmountMBtc, currency);
             //await _orderRepository.Add(order);
             //var convertedAmount = _bitcoinService.ConvertAmount(order.Currency, order.Amount);

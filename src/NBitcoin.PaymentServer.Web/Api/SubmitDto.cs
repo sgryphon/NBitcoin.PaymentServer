@@ -13,9 +13,6 @@ namespace NBitcoin.PaymentServer.Web.Api
 
         public string Currency { get; set; }
 
-        [Required]
-        public string GatewayId { get; set; }
-
         public string Memo { get; set; }
 
         public string Reference { get; set; }
