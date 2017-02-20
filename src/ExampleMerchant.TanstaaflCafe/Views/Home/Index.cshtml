@@ -4,25 +4,25 @@
 
 <div class="row">
     <div class="col-md-3">
-        <h2>Donate AUD 10.00</h2>
+        <h2>Donate AUD 5.00</h2>
         <ul>
             <li>Support the cause</li>
         </ul>
-        <a href="/gateways/1/payment?amount=10&currency=AUD&memo=Donate&reference=1">Donate</a>
+        <a href="@ViewData.Eval("GatewayAddress")payment?amount=5&currency=AUD&memo=Donate&reference=1">Donate</a>
     </div>
     <div class="col-md-3">
         <h2>Donate BTC 0.01</h2>
         <ul>
             <li>Support the cause</li>
         </ul>
-        <a href="/gateways/1/payment?amount=0.01&memo=Donate&reference=2">Donate</a>
+        <a href="@ViewData.Eval("GatewayAddress")payment?amount=0.01&memo=Donate&reference=2">Donate</a>
     </div>
     <div class="col-md-3">
-        <h2>Donate USD 5.00</h2>
+        <h2>Donate USD 10.00</h2>
         <ul>
             <li>Support the cause</li>
         </ul>
-        <a href="/gateways/1/payment?amount=5&currency=USD&memo=Donate&reference=3">Donate</a>
+        <a href="@ViewData.Eval("GatewayAddress")payment?amount=10&currency=USD&memo=Donate&reference=3">Donate</a>
     </div>
     <div class="col-md-3">
     </div>

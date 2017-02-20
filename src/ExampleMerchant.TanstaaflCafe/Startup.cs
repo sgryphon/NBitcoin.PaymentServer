@@ -29,6 +29,8 @@ namespace ExampleMerchant.TanstaaflCafe
         {
             // Add framework services.
             services.AddMvc();
+
+            services.Configure<NBitcoinPaymentServerOptions>(Configuration.GetSection("NBitcoinPaymentServer"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
