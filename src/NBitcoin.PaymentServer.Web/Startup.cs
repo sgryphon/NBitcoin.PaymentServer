@@ -90,6 +90,7 @@ namespace NBitcoin.PaymentServer.Web
             //    }
             //});
 
+            app.UseDefaultFiles();
             app.UseStaticFiles();
 
             app.UseMvc();
