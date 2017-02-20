@@ -34,7 +34,7 @@ ALTER TABLE dbo.PaymentDetails ADD CONSTRAINT
 	)
 GO
 
-CREATE UNIQUE CLUSTERED INDEX IX_BitcoinPayments_PaymentAddress ON dbo.BitcoinPayments
+CREATE UNIQUE CLUSTERED INDEX IX_PaymentDetails_PaymentAddress ON dbo.PaymentDetails
 	(
 	PaymentAddress
 	)

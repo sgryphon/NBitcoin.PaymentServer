@@ -1,14 +1,28 @@
 {
   "version": "1.0.0-*",
 
+  "buildOptions": {
+    "emitEntryPoint": true,
+    "embed": {
+      "include": [ "Scripts/*.sql" ]
+    }
+  },
+
   "dependencies": {
     "dbup4-sqlserver": "4.0.0-beta0003",
-    "NETStandard.Library": "1.6.0"
+    "Microsoft.NETCore.App": {
+      "type": "platform",
+      "version": "1.0.1"
+    }
   },
 
   "frameworks": {
-    "netstandard1.6": {
+    "netcoreapp1.6": {
       "imports": "dnxcore50"
     }
+  },
+
+  "runtimes": {
+    "win10-x64": {}
   }
 }

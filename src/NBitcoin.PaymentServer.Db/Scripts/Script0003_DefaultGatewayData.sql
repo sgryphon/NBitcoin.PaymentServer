@@ -1,6 +1,6 @@
 ﻿INSERT INTO dbo.Gateways (
 	Id, 
-	Title,
+	Name,
 	ExtPubKey
 	)
 VALUES (
