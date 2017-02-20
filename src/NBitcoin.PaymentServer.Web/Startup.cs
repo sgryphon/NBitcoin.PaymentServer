@@ -34,7 +34,6 @@ namespace NBitcoin.PaymentServer.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddOptions();
-            //services.Configure<BitcoinOptions>(Configuration.GetSection("Bitcoin"));
 
             // Add framework services.
             var mvcBuilder = services.AddMvc(options => {
@@ -46,10 +45,13 @@ namespace NBitcoin.PaymentServer.Web
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
             );
 
+            services.Configure<BitcoinRpcOptions>(Configuration.GetSection("BitcoinRpc"));
             services.AddSingleton<ICurrencyConversionService, DummyCurrencyConversionService>();
             services.AddSingleton<IPaymentsRepository, PaymentsRepository>();
             services.AddScoped<IVerificationService, BitcoinRpcVerificationService>();
             services.AddSingleton<PaymentProcessor>();
+
+            // services.AddSingleton(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -15,7 +15,7 @@
         vm.currency = $route.current.params.currency;
         vm.reference = $route.current.params.reference;
         vm.memo = $route.current.params.memo;
-        vm.gateway = item.gateway;
+        vm.gateway = item;
         vm.confirm = confirm;
 
         activate();

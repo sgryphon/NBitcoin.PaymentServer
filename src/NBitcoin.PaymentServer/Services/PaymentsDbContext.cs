@@ -23,11 +23,11 @@ namespace NBitcoin.PaymentServer.Services
 
             modelBuilder.Entity<PaymentRequest>().HasKey(x => x.PaymentId);
             modelBuilder.Entity<PaymentRequest>().HasOne<Gateway>(x => x.Gateway)
-                .WithMany(x => null);
+                .WithMany((string)null);
 
             modelBuilder.Entity<PaymentDetail>().HasKey(x => x.PaymentId);
             modelBuilder.Entity<PaymentDetail>().HasOne<PaymentRequest>(x => x.PaymentRequest)
-                .WithOne(x => null);
+                .WithOne((string)null);
         }
     }
 }

@@ -9,9 +9,9 @@
 
     function paymentService($log, $http) {
         var service = {
-            checkPaymentStatus: checkStatus,
+            checkPaymentStatus: checkPaymentStatus,
             getGateway: getGateway,
-            getPaymentStatus: getPaymentStatus,
+            getPayment: getPayment,
             submitPaymentRequest: submitPaymentRequest
         };
 

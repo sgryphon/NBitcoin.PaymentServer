@@ -21,7 +21,7 @@ namespace NBitcoin.PaymentServer.Services
 
             // Bitcoin client holds no state between requestes; it is just a facade for the RPC API
             var credentials = new NetworkCredential(_options.Value.RpcUser, _options.Value.RpcPassword);
-            var serverUri = new Uri(_options.Value.RpcServerUrl);
+            var serverUri = new Uri(_options.Value.ServerUrl);
             _bitcoinClient = new RPCClient(credentials, serverUri);
 
             _paymentAddressLabelPrefix = _options.Value.PaymentAddressLabelPrefix;
