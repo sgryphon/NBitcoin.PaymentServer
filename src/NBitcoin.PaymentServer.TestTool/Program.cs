@@ -28,10 +28,6 @@ namespace NBitcoin.PaymentServer.TestTool
         //   https://kuttler.eu/en/bitcoin/
         //   manual
 
-
-        // public const string CustomerAddressWif = "mvzXFqRgnaYFaDr2jNiEPHLRf6ycYmGF5A";
-        // private const string customerAddressSecretWif = "cVASqZM4FLSmCgGhTSPSNyMgmDBxR85EWgGXCmRpquWn34WeRv4i";
-
         private const string TestRpcPassword = "fxpFpm8ZLiwJcvYLJgQmPjvVsLF6rQc9Ly9N2EvwqFzS";
         //private const string rpcServerUrl = "http://10.2.1.4:18332";
         private const string TestRpcServerUrl = "http://13.68.221.246:18332";
