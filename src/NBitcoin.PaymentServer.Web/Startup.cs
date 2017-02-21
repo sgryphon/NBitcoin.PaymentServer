@@ -46,10 +46,12 @@ namespace NBitcoin.PaymentServer.Web
             );
 
             services.Configure<BitcoinRpcOptions>(Configuration.GetSection("BitcoinRpc"));
+
             services.AddSingleton<ICurrencyConversionService, DummyCurrencyConversionService>();
-            services.AddSingleton<IPaymentsRepository, PaymentsRepository>();
-            services.AddScoped<IVerificationService, BitcoinRpcVerificationService>();
-            services.AddSingleton<PaymentProcessor>();
+            services.AddSingleton<IVerificationService, BitcoinRpcVerificationService>();
+
+            services.AddScoped<IPaymentsRepository, PaymentsRepository>();
+            services.AddScoped<PaymentProcessor>();
 
             // services.AddSingleton(Configuration);
         }

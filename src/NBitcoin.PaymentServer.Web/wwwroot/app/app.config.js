@@ -17,10 +17,10 @@
                   controller: 'PaymentController',
                   controllerAs: 'vm'
               })
-              .when('/gateways/:gatewayId/payment/:paymentId', {
+              .when('/gateways/:gatewayId/payments/:paymentId', {
                   templateUrl: 'app/gateway/receivePayment.html',
                   resolve: {
-                      item: ['$route', '$routeParams', 'paymentService', function ($route, $routeParams, donationService) {
+                      item: ['$route', '$routeParams', 'paymentService', function ($route, $routeParams, paymentService) {
                           var item = paymentService.getPayment($route.current.params.gatewayId, $route.current.params.paymentId);
                           return item;
                       }]

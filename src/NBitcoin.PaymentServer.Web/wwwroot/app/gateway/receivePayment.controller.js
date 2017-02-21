@@ -11,8 +11,7 @@
         /* jshint validthis:true */
         var vm = this;
         vm.title = 'Payment';
-        vm.request = item.request;
-        vm.payment = item.payment;
+        vm.payment = item.paymentDetail;
         vm.status = null;
         vm.checked = null;
 
@@ -27,13 +26,14 @@
         }
 
         function checkStatus() {
-            var orderId = $route.current.params.orderId;
-            if (orderId) {
-                donationService.checkStatus($route.current.params.orderId)
-                    .then(checkStatusComplete);
+            var gatewayId = $route.current.params.gatewayId;
+            var paymentId = $route.current.params.paymentId;
+            if (gatewayId && paymentId) {
+                paymentService.checkPaymentStatus(gatewayId, paymentId)
+                    .then(checkPaymentStatusComplete);
             }
 
-            function checkStatusComplete(resultData) {
+            function checkPaymentStatusComplete(resultData) {
                 vm.status = resultData.status;
                 vm.checked = new Date();
                 if (vm.status.confirmationLevel > stopConfirmations) {

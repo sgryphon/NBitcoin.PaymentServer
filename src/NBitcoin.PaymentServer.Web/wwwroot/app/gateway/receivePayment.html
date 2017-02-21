@@ -7,7 +7,7 @@
             Payment to
         </div>
         <div class="col-md-9">
-            {{vm.request.gateway.name}}
+            {{vm.payment.paymentRequest.gateway.name}}
         </div>
     </div>
     <div class="row">
@@ -15,7 +15,7 @@
             Reference
         </div>
         <div class="col-md-9">
-            {{vm.request.reference}}
+            {{vm.payment.paymentRequest.reference}}
         </div>
     </div>
     <div class="row">
@@ -23,7 +23,7 @@
             Description
         </div>
         <div class="col-md-9">
-            {{vm.request.memo}}
+            {{vm.payment.paymentRequest.memo}}
         </div>
     </div>
     <div class="row">
@@ -31,8 +31,8 @@
             Amount
         </div>
         <div class="col-md-9">
-            {{vm.request.amount}}
-            {{vm.request.currency}}
+            {{vm.payment.paymentRequest.amount}}
+            {{vm.payment.paymentRequest.currency}}
         </div>
     </div>
 

@@ -28,8 +28,8 @@
                 .then(submitComplete);
 
             function submitComplete(resultData) {
-                var paymentPagePath = '/gateway/' + resultData.gatewayId
-                    + '/payment/' + resultData.paymentId;
+                var paymentPagePath = '/gateways/' + resultData.gatewayId
+                    + '/payments/' + resultData.paymentId;
                 $location.path(paymentPagePath);
             }
         }
