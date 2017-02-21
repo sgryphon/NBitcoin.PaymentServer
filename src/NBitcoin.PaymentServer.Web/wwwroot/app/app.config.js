@@ -6,7 +6,7 @@
             $locationProvider.hashPrefix('!');
 
             $routeProvider
-              .when('/gateways/:gatewayId/payment', {
+              .when('/gateway/:gatewayId/payment', {
                   templateUrl: 'app/gateway/payment.html',
                   resolve: {
                       item: ['$route', 'paymentService', function ($route, paymentService) {
@@ -17,7 +17,7 @@
                   controller: 'PaymentController',
                   controllerAs: 'vm'
               })
-              .when('/gateways/:gatewayId/payments/:paymentId', {
+              .when('/gateway/:gatewayId/payment/:paymentId', {
                   templateUrl: 'app/gateway/receivePayment.html',
                   resolve: {
                       item: ['$route', '$routeParams', 'paymentService', function ($route, $routeParams, paymentService) {
