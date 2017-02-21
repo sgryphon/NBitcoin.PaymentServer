@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using NBitcoin.PaymentServer.Contracts;
 using NBitcoin.RPC;
 using System;
@@ -12,12 +13,14 @@ namespace NBitcoin.PaymentServer.Services
         private const int maxConfirmationsToCheck = 1000000;
 
         RPCClient _bitcoinClient;
+        ILogger<BitcoinRpcVerificationService> _logger;
         IOptions<BitcoinRpcOptions> _options;
         string _paymentAddressLabelPrefix;
 
-        public BitcoinRpcVerificationService(IOptions<BitcoinRpcOptions> options)
+        public BitcoinRpcVerificationService(IOptions<BitcoinRpcOptions> options, ILogger<BitcoinRpcVerificationService> logger)
         {
             _options = options;
+            _logger = logger;
 
             // Bitcoin client holds no state between requestes; it is just a facade for the RPC API
             var credentials = new NetworkCredential(_options.Value.RpcUser, _options.Value.RpcPassword);

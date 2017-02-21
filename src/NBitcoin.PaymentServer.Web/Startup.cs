@@ -60,7 +60,7 @@ namespace NBitcoin.PaymentServer.Web
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             //var azureDiagnosticSettings = new AzureAppServicesDiagnosticsSettings { };
             //loggerFactory.AddAzureWebAppDiagnostics();
-            loggerFactory.AddDebug();
+            loggerFactory.AddDebug(LogLevel.Trace);
 
             if (env.IsDevelopment())
             {

@@ -11,6 +11,8 @@ namespace NBitcoin.PaymentServer.Contracts
 
         IQueryable<Gateway> Gateways();
 
+        Task<int> NextKeyIndex(Gateway gateway);
+
         IQueryable<PaymentDetail> PaymentDetails(bool include = false);
 
         IQueryable<PaymentRequest> PaymentRequests();

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using NBitcoin.Payment;
 using NBitcoin.PaymentServer.Contracts;
 using NBitcoin.PaymentServer.Services;
@@ -11,14 +12,17 @@ namespace NBitcoin.PaymentServer
     public class PaymentProcessor
     {
         ICurrencyConversionService _currencyConversionService;
+        ILogger<PaymentProcessor> _logger;
         IPaymentsRepository _repository;
         IVerificationService _verificationService;
 
         public PaymentProcessor(
+            ILogger<PaymentProcessor> logger,
             IPaymentsRepository repository, 
             ICurrencyConversionService currencyConversionService, 
             IVerificationService verificationService)
         {
+            _logger = logger;
             _repository = repository;
             _currencyConversionService = currencyConversionService;
             _verificationService = verificationService;
@@ -43,11 +47,13 @@ namespace NBitcoin.PaymentServer
         public async Task<PaymentDetail> CreatePayment(Guid gatewayId, decimal amount,
             string currency, string reference, string memo)
         {
+            _logger.LogInformation("Gateway {0}, create payment request for {1} [ref: {2}]", gatewayId, amount, reference);
             // Create payment request
             var gateway = _repository.Gateways().First(x => x.Id == gatewayId);
             var paymentRequest = new PaymentRequest(gateway, amount, currency, reference, memo);
             await _repository.Add(paymentRequest);
             await _repository.Save();
+            _logger.LogDebug("Payment request {0} created", paymentRequest.PaymentId);
 
             // Convert the amount to BTC
             string originalCurrency;
@@ -65,10 +71,11 @@ namespace NBitcoin.PaymentServer
                 originalCurrency = currency;
                 amountBtc = convertedBtcAmount.AmountBtc;
                 conversionRate = convertedBtcAmount.ConversionRate;
+                _logger.LogDebug("Converted {0} {1} to {2} BTC", amount, currency, amountBtc);
             }
 
-            // TODO: Generate the ID of the order and the address
-            var keyIndex = 1001;
+            // Generate the ID of the order and the address
+            var keyIndex = await _repository.NextKeyIndex(gateway);
             if (keyIndex == 0)
             {
                 throw new Exception("Payment index number not set.");
@@ -76,18 +83,25 @@ namespace NBitcoin.PaymentServer
             var masterPubKey = new BitcoinExtPubKey(gateway.ExtPubKey);
             var derivedOrderKey = masterPubKey.ExtPubKey.Derive((uint)keyIndex);
             var paymentAddress = derivedOrderKey.PubKey.GetAddress(masterPubKey.Network);
+            var paymentAddressWif = paymentAddress.ToWif();
+            _logger.LogDebug("Derived payment address [{0}] '{1}'", keyIndex, paymentAddressWif);
 
             // Save the details
             var paymentDetail = new PaymentDetail(paymentRequest, 
-                keyIndex, paymentAddress.ToWif(), 
+                keyIndex, paymentAddressWif, 
                 amountBtc, originalCurrency, conversionRate);
             await _repository.Add(paymentDetail);
             await _repository.Save();
 
             // Register address with bitcoin server
-            _verificationService.RegisterPaymentAddress(gateway.GatewayNumber, paymentAddress.ToWif());
-            paymentDetail.SetRegistered();
-            await _repository.Save();
+            _logger.LogDebug("Registering {0} with verification service", paymentAddressWif);
+            var registered = _verificationService.RegisterPaymentAddress(gateway.GatewayNumber, paymentAddressWif);
+            _logger.LogDebug("Verification result: {0}", registered);
+            if (registered)
+            {
+                paymentDetail.SetRegistered();
+                await _repository.Save();
+            }
 
             return paymentDetail;
         }
