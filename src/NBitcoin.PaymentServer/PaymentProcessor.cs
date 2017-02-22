@@ -30,12 +30,16 @@ namespace NBitcoin.PaymentServer
 
         public ConvertedBtcAmount ConvertAmount(string currency, decimal amount)
         {
+            _logger.LogInformation(ServerEventId.ConversionRequest, "Convert {0} {1} to BTC", currency, amount);
+
             var convertedBtcAmount = _currencyConversionService.ConvertAmount(currency, amount);
             return convertedBtcAmount;
         }
 
         public PaymentStatus CheckPaymentStatus(Guid gatewayId, Guid paymentId)
         {
+            _logger.LogDebug(ServerEventId.CheckPaymentStatus, "Check payment status, gateway '{0}', payment '{0}'", gatewayId, paymentId);
+
             var paymentDetail = _repository.PaymentDetails()
                 .Where(p => p.PaymentRequest.Gateway.Id == gatewayId)
                 .Where(p => p.PaymentId == paymentId)
@@ -47,7 +51,8 @@ namespace NBitcoin.PaymentServer
         public async Task<PaymentDetail> CreatePayment(Guid gatewayId, decimal amount,
             string currency, string reference, string memo)
         {
-            _logger.LogInformation("Gateway {0}, create payment request for {1} [ref: {2}]", gatewayId, amount, reference);
+            _logger.LogInformation(ServerEventId.CreatePayment, "Gateway {0}, create payment request for {1} [ref: {2}]", gatewayId, amount, reference);
+
             // Create payment request
             var gateway = _repository.Gateways().First(x => x.Id == gatewayId);
             var paymentRequest = new PaymentRequest(gateway, amount, currency, reference, memo);
@@ -108,25 +113,36 @@ namespace NBitcoin.PaymentServer
 
         public Gateway GetGateway(string gatewayReference)
         {
+            _logger.LogInformation(ServerEventId.GetGateway, "Get gateway '{0}'", gatewayReference);
+
             Guid gatewayId;
             int gatewayNumber;
             Gateway gateway = null;
             if (Guid.TryParse(gatewayReference, out gatewayId))
             {
-                gateway = _repository.Gateways().First(x => x.Id == gatewayId);
+                gateway = _repository.Gateways()
+                    .Where(x => x.IsActive)
+                    .First(x => x.Id == gatewayId);
             }
             else
             {
                 if (int.TryParse(gatewayReference, out gatewayNumber))
                 {
-                    gateway = _repository.Gateways().First(x => x.GatewayNumber == gatewayNumber);
+                    gateway = _repository.Gateways()
+                        .Where(x => x.IsActive)
+                        .First(x => x.GatewayNumber == gatewayNumber);
                 }
             }
+
+            _logger.LogDebug("Gateway '{0}' found", gateway.Name);
+
             return gateway;
         }
 
         public PaymentDetail GetPaymentDetail(Guid gatewayId, Guid paymentId)
         {
+            _logger.LogInformation(ServerEventId.GetPaymentDetails, "Get payment details, gateway '{0}', payment '{1}'", gatewayId, paymentId);
+
             var paymentDetail = _repository.PaymentDetails(true)
                 .Where(p => p.PaymentRequest.Gateway.Id == gatewayId)
                 .Where(p => p.PaymentId == paymentId)

@@ -28,7 +28,7 @@ namespace NBitcoin.PaymentServer.Web.Api
 
             var machineName = Environment.MachineName;
 
-            var eventId = new EventId(1001, "GetAbout");
+            var eventId = new EventId(1, "GetAbout");
             _logger.LogInformation(eventId, "About controller, version {0}, machine {1}", 
                 engineFileVersionInfo.ProductVersion, machineName);
 

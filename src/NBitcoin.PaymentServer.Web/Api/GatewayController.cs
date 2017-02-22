@@ -38,7 +38,7 @@ namespace NBitcoin.PaymentServer.Web.Api
             [FromBody]SubmitDto dto
             )
         {
-            _logger.LogInformation(1101, "Create payment submit {0}, {1}, {2}, {3}", gatewayId, dto.Amount, dto.Currency, dto.Reference);
+            _logger.LogDebug("Create payment submit {0}, {1}, {2}, {3}", gatewayId, dto.Amount, dto.Currency, dto.Reference);
 
             var paymentDetails = await _paymentProcessor.CreatePayment(gatewayId, dto.Amount, dto.Currency, dto.Reference, dto.Memo);
             Response.StatusCode = 201;
