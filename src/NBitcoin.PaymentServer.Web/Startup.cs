@@ -64,6 +64,9 @@ namespace NBitcoin.PaymentServer.Web
             //loggerFactory.AddAzureWebAppDiagnostics();
             loggerFactory.AddDebug(LogLevel.Trace);
 
+            var configLogger = loggerFactory.CreateLogger<Startup>();
+            configLogger.LogInformation(ServerEventId.ServerStartup, "Startup configure - logging started");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
