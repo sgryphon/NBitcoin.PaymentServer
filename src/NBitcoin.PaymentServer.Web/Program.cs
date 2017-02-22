@@ -10,6 +10,7 @@ namespace NBitcoin.PaymentServer.Web
             var host = new WebHostBuilder()
                 .UseKestrel()
                 .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseAzureAppServices()
                 .UseIISIntegration()
                 .UseStartup<Startup>()
                 .Build();
