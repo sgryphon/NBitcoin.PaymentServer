@@ -1,5 +1,5 @@
 {
-  "version": "1.1.0-*",
+  "version": "1.0.0-*",
   "title": "NBitcoin.PaymentServer",
   "description": "Command line utility for checking and collecting payments for NBitcoin.PaymentServer",
   "copyright": "© Copyleft 2017 NBitcoin Payment Server",
@@ -16,6 +16,8 @@
       "version": "1.0.1"
     },
     "NBitcoin": "3.0.2.4",
+    "System.Diagnostics.FileVersionInfo": "4.0.0",
+    "Microsoft.Extensions.PlatformAbstractions": "1.0.0",
     "NBitcoin.PaymentServer": "1.0.0-*"
   },
 

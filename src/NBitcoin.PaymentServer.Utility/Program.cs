@@ -1,14 +1,16 @@
-﻿using NBitcoin;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Microsoft.Extensions.PlatformAbstractions;
+using NBitcoin;
+using NBitcoin.PaymentServer.Services;
 using NBitcoin.RPC;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
-using NBitcoin.PaymentServer.Services;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+using System.Reflection;
 
 namespace NBitcoin.PaymentServer.Utility
 {
@@ -38,6 +40,14 @@ namespace NBitcoin.PaymentServer.Utility
 
         public static void Main(string[] args)
         {
+            var applicationVersion = PlatformServices.Default.Application.ApplicationVersion;
+            var machineName = Environment.MachineName;
+            var assembly = typeof(Program).GetTypeInfo().Assembly;
+            var fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
+
+            Console.WriteLine("NBitcoin.PaymentServer.Utility, v{0}, running on {1}", applicationVersion, machineName);
+            Console.WriteLine("v{0} [v{1}]", fileVersionInfo.ProductVersion, assembly.GetName().Version);
+
             var defaultConfig = new Dictionary<string, string>
                 {
                     { "rpcserver", TestRpcServerUrl },

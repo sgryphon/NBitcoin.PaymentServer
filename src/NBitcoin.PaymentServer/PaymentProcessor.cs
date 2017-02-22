@@ -1,8 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using NBitcoin.Payment;
 using NBitcoin.PaymentServer.Contracts;
-using NBitcoin.PaymentServer.Services;
 using System;
 using System.Linq;
 using System.Threading.Tasks;

@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NBitcoin.PaymentServer.Contracts;
-using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 

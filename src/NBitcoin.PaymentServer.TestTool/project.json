@@ -1,5 +1,5 @@
 ﻿{
-  "version": "1.1.0-*",
+  "version": "1.0.0-*",
   "title": "NBitcoin.PaymentServer",
   "description": "Command line testing tool (e.g. manually make payments) for NBitcoin.PaymentServer",
   "copyright": "© Copyleft 2017 NBitcoin Payment Server",
