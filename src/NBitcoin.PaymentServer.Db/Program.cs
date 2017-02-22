@@ -1,7 +1,9 @@
 ﻿using DbUp;
+using Microsoft.Extensions.PlatformAbstractions;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -12,6 +14,14 @@ namespace NBitcoin.PaymentServer.Db
     {
         public static int Main(string[] args)
         {
+            var applicationVersion = PlatformServices.Default.Application.ApplicationVersion;
+            var machineName = Environment.MachineName;
+            var assembly = typeof(Program).GetTypeInfo().Assembly;
+            var fileVersionInfo = FileVersionInfo.GetVersionInfo(assembly.Location);
+
+            Console.WriteLine("NBitcoin.PaymentServer.Db, v{0}, running on {1}", applicationVersion, machineName);
+            Console.WriteLine("v{0} [v{1}]", fileVersionInfo.ProductVersion, assembly.GetName().Version);
+
             var connectionString =
                 args.FirstOrDefault()
                 ?? "Data Source=(local);Initial Catalog=NBitcoinPayments;Integrated Security=True;MultipleActiveResultSets=True";
