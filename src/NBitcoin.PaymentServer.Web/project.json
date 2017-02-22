@@ -1,4 +1,8 @@
 {
+  "version": "1.1.0-*",
+  "title": "NBitcoin.PaymentServer.Web",
+  "description": "Web interface for NBitcoin.PaymentServer",
+  "copyright": "© Copyleft 2017 NBitcoin Payment Server",
   "dependencies": {
     "Microsoft.NETCore.App": {
       "version": "1.0.1",

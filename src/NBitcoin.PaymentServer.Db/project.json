@@ -1,5 +1,8 @@
 {
-  "version": "1.0.0-*",
+  "version": "1.1.0-*",
+  "title": "NBitcoin.PaymentServer.Db",
+  "description": "Database deployment tool for NBitcoin.PaymentServer",
+  "copyright": "© Copyleft 2017 NBitcoin Payment Server",
 
   "buildOptions": {
     "emitEntryPoint": true,

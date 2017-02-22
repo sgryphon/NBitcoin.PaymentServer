@@ -28,15 +28,22 @@ namespace NBitcoin.PaymentServer.Web.Api
 
             var machineName = Environment.MachineName;
 
+            var applicationVersion = Microsoft.Extensions.PlatformAbstractions.PlatformServices.Default.Application.ApplicationVersion;
+
             var eventId = new EventId(1, "GetAbout");
             _logger.LogInformation(eventId, "About controller, version {0}, machine {1}", 
                 engineFileVersionInfo.ProductVersion, machineName);
 
-            return new
+            var aboutInfo = new
             {
+                ApplicationVersion = applicationVersion,
+                AssemblyVersion = engineAssembly.GetName().Version.ToString(),
+                FileVersion = engineFileVersionInfo.FileVersion,
                 InformationalVersion = engineFileVersionInfo.ProductVersion,
                 MachineName = machineName
             };
+
+            return aboutInfo;
         }
     }
 }

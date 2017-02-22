@@ -5,7 +5,7 @@
         .module('app')
         .controller('ErrorController', ErrorController);
 
-    HomeController.$inject = ['$location'];
+    ErrorController.$inject = ['$location'];
 
     function ErrorController($location) {
         /* jshint validthis:true */

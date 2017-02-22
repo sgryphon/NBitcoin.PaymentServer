@@ -6,6 +6,11 @@
             $locationProvider.hashPrefix('!');
 
             $routeProvider
+              .when('/', {
+                  templateUrl: 'app/home/home.html',
+                  controller: 'HomeController',
+                  controllerAs: 'vm'
+              })
               .when('/gateway/:gatewayId/payment', {
                   templateUrl: 'app/gateway/payment.html',
                   resolve: {
