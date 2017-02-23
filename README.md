@@ -128,19 +128,19 @@ You can then regularly collect the money in this wallet and send it to your main
 
 5. Re-enter the seed, then enter a password
 
-Electrum uses 'm/0/*' for wallet addresses and 'm/1/*' for change addresses, so to get the same addresses as displayed in the wallet we first need to derive the 'm/0' key.
+    Electrum uses 'm/0/*' for wallet addresses and 'm/1/*' for change addresses, so to get the same addresses as displayed in the wallet we first need to derive the 'm/0' key.
 
 6. When the new wallet appears, select Wallet -> Master Public Keys
 
 7. Use the utility program from the project to derive the m/0 key. The output will show both the derived key and derived address; for this level you want the key value.
 
-    dotnet NBitcoin.PaymentServer.Utility.dll -o derive -m '<master public key>' -i 'm/0'
+        dotnet NBitcoin.PaymentServer.Utility.dll -o derive -m '<master public key>' -i 'm/0'
 
 8. The derived key value from the above is what you need to configure the payment server with, but first, to check it works, ensure the address output matches the first address in the wallet:
 
-    dotnet NBitcoin.PaymentServer.Utility.dll -o derive -m '<derived key>' -i 'm/0'
+        dotnet NBitcoin.PaymentServer.Utility.dll -o derive -m '<derived key>' -i 'm/0'
 
-(You can also get this by deriving 'm/0/0' from the original master key)
+    (You can also get this by deriving 'm/0/0' from the original master key)
 
 9. The derived key needs to be stored in the server, to generate the same addresses as the wallet
 
