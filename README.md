@@ -144,18 +144,18 @@ You can then regularly collect the money in this wallet and send it to your main
 
 9. The derived key needs to be stored in the server, to generate the same addresses as the wallet
 
-Currently this needs to be done directly in the database, via SQL Server Management Studio.
+    Currently this needs to be done directly in the database, via SQL Server Management Studio.
 
-Put your values into the following SQL statement, and run it in the database. This will replace gateway #1 with your own custom values. You need to do this before running any transactions (otherwise there will be references to the ID).
+    Put your values into the following SQL statement, and run it in the database. This will replace gateway #1 with your own custom values. You need to do this before running any transactions (otherwise there will be references to the ID).
 
-    DELETE FROM [dbo].[GatewayKeyIndexes];
-    DELETE FROM [dbo].[Gateways];
-    SET IDENTITY_INSERT [dbo].[Gateways] ON;
-    INSERT INTO [dbo].[Gateways] (Id, GatewayNumber, Name, ExtPubKey)
-        VALUES (NEWID(), 1, '<store name>', '<derived key>');
-    INSERT INTO [dbo].[GatewayKeyIndexes] (GatewayId, LastKeyIndex)
-        VALUES ((SELECT Id FROM [dbo].[Gateways] WHERE GatewayNumber = 1), 0);
-    SET IDENTITY_INSERT [dbo].[Gateways] OFF
+        DELETE FROM [dbo].[GatewayKeyIndexes];
+        DELETE FROM [dbo].[Gateways];
+        SET IDENTITY_INSERT [dbo].[Gateways] ON;
+        INSERT INTO [dbo].[Gateways] (Id, GatewayNumber, Name, ExtPubKey)
+            VALUES (NEWID(), 1, '<store name>', '<derived key>');
+        INSERT INTO [dbo].[GatewayKeyIndexes] (GatewayId, LastKeyIndex)
+            VALUES ((SELECT Id FROM [dbo].[Gateways] WHERE GatewayNumber = 1), 0);
+        SET IDENTITY_INSERT [dbo].[Gateways] OFF
 
 Once set up, the server should generate the same sequence of payment addresses as Electrum, so any transactions can be managed in Electrum (which has the private key). The server can generate addresses, because it has the public key, but can't do anything except watch them.
 
