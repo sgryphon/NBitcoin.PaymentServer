@@ -106,6 +106,8 @@ Some additional utilities that may be useful during development:
 * NBitcoin.PaymentServer.TestTool - console app for making manual payments (from TestNet 'customer' addresses to the payment server address); you could also just use a wallet to do this
 * NBitcoin.PaymentServer.Utility - console utility that will check payments and also collect (sweep) payments from an address to another address (also see below for a way to set up Electrum to do this)
 
+The project has a build and release pipeline set up in Visual Studio Team System, that deploys to the TANSTAAFL Café test & demo sites (in Azure). The pipeline handles things like version numbering (using Git Version).
+
 
 To configure the public key using a HD wallet
 ---------------------------------------------
@@ -132,11 +134,11 @@ Electrum uses 'm/0/*' for wallet addresses and 'm/1/*' for change addresses, so 
 
 7. Use the utility program from the project to derive the m/0 key. The output will show both the derived key and derived address; for this level you want the key value.
 
-  dotnet NBitcoin.PaymentServer.Utility.dll -o derive -m '<master public key>' -i 'm/0'
+    dotnet NBitcoin.PaymentServer.Utility.dll -o derive -m '<master public key>' -i 'm/0'
 
 8. The derived key value from the above is what you need to configure the payment server with, but first, to check it works, ensure the address output matches the first address in the wallet:
 
-  dotnet NBitcoin.PaymentServer.Utility.dll -o derive -m '<derived key>' -i 'm/0'
+    dotnet NBitcoin.PaymentServer.Utility.dll -o derive -m '<derived key>' -i 'm/0'
 
 (You can also get this by deriving 'm/0/0' from the original master key)
 
@@ -146,14 +148,14 @@ Currently this needs to be done directly in the database, via SQL Server Managem
 
 Put your values into the following SQL statement, and run it in the database. This will replace gateway #1 with your own custom values. You need to do this before running any transactions (otherwise there will be references to the ID).
 
-  DELETE FROM [dbo].[GatewayKeyIndexes];
-  DELETE FROM [dbo].[Gateways];
-  SET IDENTITY_INSERT [dbo].[Gateways] ON;
-  INSERT INTO [dbo].[Gateways] (Id, GatewayNumber, Name, ExtPubKey)
-    VALUES (NEWID(), 1, '<store name>', '<derived key>');
-  INSERT INTO [dbo].[GatewayKeyIndexes] (GatewayId, LastKeyIndex)
-    VALUES ((SELECT Id FROM [dbo].[Gateways] WHERE GatewayNumber = 1), 0);
-  SET IDENTITY_INSERT [dbo].[Gateways] OFF
+    DELETE FROM [dbo].[GatewayKeyIndexes];
+    DELETE FROM [dbo].[Gateways];
+    SET IDENTITY_INSERT [dbo].[Gateways] ON;
+    INSERT INTO [dbo].[Gateways] (Id, GatewayNumber, Name, ExtPubKey)
+        VALUES (NEWID(), 1, '<store name>', '<derived key>');
+    INSERT INTO [dbo].[GatewayKeyIndexes] (GatewayId, LastKeyIndex)
+        VALUES ((SELECT Id FROM [dbo].[Gateways] WHERE GatewayNumber = 1), 0);
+    SET IDENTITY_INSERT [dbo].[Gateways] OFF
 
 Once set up, the server should generate the same sequence of payment addresses as Electrum, so any transactions can be managed in Electrum (which has the private key). The server can generate addresses, because it has the public key, but can't do anything except watch them.
 
