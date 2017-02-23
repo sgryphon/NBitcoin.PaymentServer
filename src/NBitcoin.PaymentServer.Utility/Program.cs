@@ -87,6 +87,12 @@ namespace NBitcoin.PaymentServer.Utility
                     Collect();
                     break;
 
+                case "DERIVE":
+                    // Store
+                    //  dotnet NBitcoin.PaymentServer.Utility.dll -o derive -m "tpubD6NzVbkrYhZ4X8PqzxNhizrbPtoJLvk6C64CiFXH7QMKqyjyNd9wRHBHJFpkKwZxFAA7Z1FZqL8qKdsZVj653k2PhaVp1PkKZTMHiTU3BmS" -i 'm/5'
+                    Derive();
+                    break;
+
                 case "GENERATE":
                     GenerateMasterKey();
                     break;
@@ -241,6 +247,24 @@ namespace NBitcoin.PaymentServer.Utility
                 Console.WriteLine("Transaction sent");
             }
 
+        }
+
+        public static void Derive()
+        {
+            var masterExtPubKeyWif = Configuration["master"];
+            var keyIndex = Configuration["keyindex"];
+            var keyPath = new KeyPath(keyIndex);
+
+            Console.WriteLine("Using key path: {0}", keyPath);
+
+            var bitcoinExtPubKey = new BitcoinExtPubKey(masterExtPubKeyWif);
+            var derivedKey = bitcoinExtPubKey.ExtPubKey.Derive(keyPath);
+
+            var derivedBitcoinKey = new BitcoinExtPubKey(derivedKey, bitcoinExtPubKey.Network);
+
+            Console.WriteLine("Derived: {0}", derivedBitcoinKey);
+            var derivedAddress = derivedBitcoinKey.ExtPubKey.PubKey.GetAddress(derivedBitcoinKey.Network);
+            Console.WriteLine("Address: {0}", derivedAddress);
         }
 
         public static void GenerateMasterKey()

@@ -21,7 +21,7 @@
         activate();
 
         function activate() {
-            checkStatusPromise = $interval(checkStatus, 2000);
+            checkStatusPromise = $interval(checkStatus, 30000);
             checkStatus();
         }
 
