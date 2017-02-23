@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using System.Diagnostics;
+using System.Reflection;
+
 
 namespace ExampleMerchant.TanstaaflCafe.Controllers
 {
@@ -15,7 +18,9 @@ namespace ExampleMerchant.TanstaaflCafe.Controllers
 
         public IActionResult Index()
         {
-            return View(new {GatewayAddress = GatewayAddress});
+            return View(new {
+                GatewayAddress = GatewayAddress,
+            });
         }
 
         public IActionResult Error()

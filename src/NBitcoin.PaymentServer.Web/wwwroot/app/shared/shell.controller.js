@@ -24,7 +24,7 @@
                 .then(getAboutComplete);
 
             function getAboutComplete(resultData) {
-                vm.informationalVersion = 'v' + resultData.informationalVersion;
+                vm.informationalVersion = resultData.informationalVersion;
             }
         }
     }
